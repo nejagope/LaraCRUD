@@ -11,15 +11,15 @@ function iniciar(route, handle) {
 	var dataPosteada = "";
 	
 	request.addListener("data", function(trozoPosteado) {
-		console.log("Se ha recibido parte de la info");		
-		console.log("Recibido trozo POST '" + trozoPosteado + "'.");		
+		//console.log("Se ha recibido parte de la info");		
+		//console.log("Recibido trozo POST '" + trozoPosteado + "'.");		
 		dataPosteada += trozoPosteado;
 		//aqui es necesario revisar el tamañno del mensaje recibido
 		//hay que colocar una cota superior con dataPosteada.length
 		});
 		
 	request.addListener("end", function() {
-		console.log("Se ha recibido el post totalmente: " + dataPosteada);		
+		//console.log("Se ha recibido el post totalmente: " + dataPosteada);		
 		route(pathname, handle, response, dataPosteada);
 		});
 	

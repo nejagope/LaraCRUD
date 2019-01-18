@@ -5,7 +5,8 @@ var fs = require("fs");
 function compilar(codigoAltoNivel){	
 	try{
 		var ast =  getAST(codigoAltoNivel);						
-		return jsonToString(ast);
+		return ast;
+		//return jsonToString(ast);
 	}catch(ex){
 		return ex;
 	}

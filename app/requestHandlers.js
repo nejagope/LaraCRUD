@@ -21,17 +21,72 @@ function index(response, postData) {
 }
 
 function compilar(response, postData) {    
-    //let dataHtml = fs.readFileSync('./html/compilar.htm', 'utf8');
-    //let plantilla = dataHtml.split("{%}");    
-    let codigo = querystring.parse(postData)["txtCode0"];
-
-    let ast = compilador.compilar(codigo);    
-    //let html = plantilla[0] + plantilla[1] + plantilla[2]; 
-
+    let ast = compilador.compilar(codigo); 
     response.writeHead(200, {"Content-Type": "application/json"});    
-    response.write(ast);    
+    response.write(JSON.stringify(ast));    
     //response.write("Tu enviaste: " + querystring.parse(postData)["txtCode0"]);
     response.end(); 
+}
+
+function generateIndex(response, postData) {    
+    //compilación del archivo fuente la migración
+    let codigo = querystring.parse(postData)["txtCode0"];
+    let ast = compilador.compilar(codigo);
+
+    let nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 1);
+
+    //generación de index.blade.php
+    let plantilla = fs.readFileSync('./laravel/views/index.blade.php', 'utf8');    
+    console.log(ast.up.table);
+    plantilla = plantilla.replace(/%Table%/g, ast.up.table);    
+    plantilla = plantilla.replace(/%TableSingular%/g, nameTableSingular); 
+    plantilla = plantilla.replace(/%RoutePrefix%/g, 'sge'); 
+
+    //encabezados de columna
+    let filaHeaders = '';
+    ast.up.definitions.forEach(function(definition, i, arr){
+        if (definition.name){
+            filaHeaders += '<th>' + definition.name + '</th>\n';
+        }else{
+            if (definition.coltype == "timestamps"){
+                filaHeaders += '<th>created_at</th>\n<th>updated_at</th>\n';
+            }
+            else if (definition.coltype == "remembertoken"){
+                filaHeaders += '<th>remember_token</th>\n';
+            }
+        }
+    });
+    plantilla = plantilla.replace(/%ColumnHeaders%/g, filaHeaders);   
+    
+    //datos
+    let fila = '';
+    ast.up.definitions.forEach(function(definition, i, arr){
+        
+        if (definition.name && definition.name.endsWith('_id')){
+            //llaves foráneas
+            fila += "{{ Form::select('" + definition.name + "', $" + definition.name.substring(0, definition.name.length - 3) + "s , $" + definition.name + ", ['class' => 'form-control']) }}\n"
+        }else{
+            switch(definition.coltype) {            
+                case "remembertoken":
+                    fila += '<td>not_recovered<td>\n';              
+                  break;
+                default:
+                    fila += '<td>$'+ nameTableSingular + '->' + definition.name + '<td>\n';              
+              }
+        }        
+    });
+    plantilla = plantilla.replace(/%Fields%/g, fila);   
+
+    //Envío del archivo al cliente
+    var filePath =  "./genfiles/index.blade.php";
+
+    fs.writeFileSync(filePath, plantilla, 'utf8');    
+
+    response.writeHead(200, {
+        "Content-Type": "application/octet-stream",
+        "Content-Disposition" : "attachment; filename=index.blade.php"
+    });
+    fs.createReadStream(filePath).pipe(response);
 }
 /*
 function index(response, postData) {	
@@ -64,3 +119,4 @@ function subir(response, postData) {
 exports.index = index;
 exports.subir = subir;
 exports.compilar = compilar;
+exports.generateIndex = generateIndex;

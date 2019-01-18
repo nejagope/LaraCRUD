@@ -7,5 +7,6 @@ handle["/"] = requestHandlers.index;
 handle["/index"] = requestHandlers.index;
 handle["/subir"] = requestHandlers.subir;
 handle["/compilar"] = requestHandlers.compilar;
+handle["/generateIndex"] = requestHandlers.generateIndex;
 
 servidor.iniciar(router.route, handle);
