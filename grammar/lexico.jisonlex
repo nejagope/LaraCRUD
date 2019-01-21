@@ -84,6 +84,7 @@
 "timestamp"				return 'timestamp'
 "timestamps"				return 'timestamps'
 "remembertoken"			return 'remembertoken'
+"softdeletes"	return 'softdeletes'
 "nullable"				return 'nullable'
 "unsigned"				return 'unsigned'
 "unique"				return 'unique'

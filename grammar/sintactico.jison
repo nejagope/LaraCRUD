@@ -67,6 +67,8 @@ COLTYPE : increments
             {{$$ = {type: 'coltype', val: 'timestamps' } }}
         | remembertoken
             {{$$ = {type: 'coltype', val: 'remembertoken' } }}
+        | softdeletes
+            {{$$ = {type: 'coltype', val: 'softdeletes' } }}
         ;
 
 MODIFIERS : MODIFIERS MODIFIER
