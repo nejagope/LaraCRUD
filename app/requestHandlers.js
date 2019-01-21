@@ -29,16 +29,27 @@ function compilar(response, postData) {
 }
 
 function generateIndex(response, postData) {    
-    //compilación del archivo fuente la migración
+    let tableName = querystring.parse(postData)["tableName"];
+    let nameTableSingular = querystring.parse(postData)["tableSingularName"];
+    
+    //compilación del archivo fuente la migración    
     let codigo = querystring.parse(postData)["txtCode0"];
     let ast = compilador.compilar(codigo);
 
-    let nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 1);
+    if (!tableName)
+        tableName = ast.up.table;
+
+        if (!nameTableSingular){
+            if (tableName.endsWith('ies'))
+                nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 3) + "y";
+            else
+                nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 1);
+        }
 
     //generación de index.blade.php
     let plantilla = fs.readFileSync('./laravel/views/index.blade.php', 'utf8');    
-    console.log(ast.up.table);
-    plantilla = plantilla.replace(/%Table%/g, ast.up.table);    
+    
+    plantilla = plantilla.replace(/%Table%/g, tableName);    
     plantilla = plantilla.replace(/%TableSingular%/g, nameTableSingular); 
     plantilla = plantilla.replace(/%RoutePrefix%/g, 'sge'); 
 
@@ -111,16 +122,28 @@ function generateIndex(response, postData) {
 }
 
 function generateCreate(response, postData) {    
-    //compilación del archivo fuente la migración
+    let tableName = querystring.parse(postData)["tableName"];
+    let nameTableSingular = querystring.parse(postData)["tableSingularName"];
+    
+    //compilación del archivo fuente la migración    
     let codigo = querystring.parse(postData)["txtCode0"];
     let ast = compilador.compilar(codigo);
 
-    let nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 1);
+    if (!tableName)
+        tableName = ast.up.table;
+
+    if (!nameTableSingular){
+        if (tableName.endsWith('ies'))
+            nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 3) + "y";
+        else
+            nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 1);
+    }
+
 
     //generación de index.blade.php
     let plantilla = fs.readFileSync('./laravel/views/create.blade.php', 'utf8');    
-    console.log(ast.up.table);
-    plantilla = plantilla.replace(/%Table%/g, ast.up.table);    
+    
+    plantilla = plantilla.replace(/%Table%/g, tableName);    
     plantilla = plantilla.replace(/%TableSingular%/g, nameTableSingular); 
     plantilla = plantilla.replace(/%RoutePrefix%/g, 'sge'); 
 

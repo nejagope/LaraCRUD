@@ -52,42 +52,33 @@
     </div>
 
     <form action="/compilar" method="post">
-      <div class="text-right">        
-        <div>
-          <div class="btn-group">          			              
-              <div class="text-right">
-                <button type="submit" class="btn btn-primary">
-                  Compilar
-                </button>
+      <div class="row">
+          <div class="col-sm-3">
+              <input type="text" name="tableName" class="form-control" placeholder="Table name">
+          </div>        
+          <div class="col-sm-3">
+              <input type="text" name="tableSingularName" class="form-control" placeholder="Table singular name">  
+          </div>   
 
-                <input type="submit" formaction="/generateIndex" class="btn btn-primary" value="Generate Index">
-
-                <input type="submit" formaction="/generateCreate" class="btn btn-primary" value="Generate Create">                    
+          <div class="col-sm-6">
+            <div class="text-right">        
+                <div>
+                  <div class="btn-group">          			              
+                      <div class="text-right">
+                        <button type="submit" class="btn btn-primary">
+                          Compilar
+                        </button>
+        
+                        <input type="submit" formaction="/generateIndex" class="btn btn-primary" value="Generate Index">
+        
+                        <input type="submit" formaction="/generateCreate" class="btn btn-primary" value="Generate Create">                    
+                      </div>              
+                    </div>
+                  </div>  	          
               </div>
-              <!--
-                <button type="button" class="btn btn-primary">
-                  Debuguear
-                </button>
-                <button type="button" class="btn btn-primary">
-                  Continuar
-                </button>
-                <button type="button" class="btn btn-primary">
-                  Siguiente
-                </button>
-                <button type="button" class="btn btn-primary">
-                  Saltar
-                </button>
-                <button type="button" class="btn btn-primary">
-                  Autom&aacute;tico
-                </button>
-                <button type="button" class="btn btn-primary">
-                  Exportar
-                </button>
-                -->
-            </div>
-          </div>  	          
-      </div>
-			
+          </div>            
+        </div>
+      
 			<!-- Nav tabs -->
 			<ul class="nav nav-tabs">
 			    <li class="nav-item">
