@@ -184,9 +184,17 @@ function generateCreate(response, postData) {
                     inputType = "checkbox";
                     break;
             }
-
+            
             if (isForeignKey){
-                form += "           {{ Form::select('" + definition.name + "', $" + definition.name.substring(0, definition.name.length - 3) + "s , $" + definition.name + ", ['class' => 'form-control']) }}\n"
+                let pluralFieldName = "";
+
+                if (definition.name.endsWith('y_id'))
+                    pluralFieldName = fieldName.substring(0, fieldName.length - 4) + 'ies';
+                else if (definition.name.endsWith('_id'))
+                    pluralFieldName = fieldName.substring(0, fieldName.length - 3) + 's';                
+
+                form += "           {{ Form::select('%FieldName%', $%PluralFieldName% , $%FieldName%, ['class' => 'form-control']) }}\n"
+                form = form.replace(/%PluralFieldName%/g, pluralFieldName);       
             }else{
                 form += '           <input id="%FieldName%" type="'+ inputType +'" class="form-control" name="%FieldName%" value="{{ old(\'%FieldName%\') }}">\n'                
             }
@@ -199,7 +207,7 @@ function generateCreate(response, postData) {
             form += '      </div>\n'
             form += '</div>\n'
 
-            form = form.replace(/%FieldName%/g, fieldName);
+            form = form.replace(/%FieldName%/g, fieldName);            
         }        
 
     });
@@ -289,15 +297,17 @@ function generateEdit(response, postData) {
                 let pluralFieldName = "";
 
                 if (definition.name.endsWith('y_id'))
-                    pluralFieldName = definition.name.substring(0, definition.name.length - 4) + 'ies';
+                    pluralFieldName = fieldName.substring(0, fieldName.length - 4) + 'ies';
                 else if (definition.name.endsWith('_id'))
-                    pluralFieldName = definition.name.substring(0, definition.name.length - 3) + 's';                
+                    pluralFieldName = fieldName.substring(0, fieldName.length - 3) + 's';                
 
                 form += "           @if (null !== (old('%FieldName%')))\n"
                 form += "               {{ Form::select('%FieldName%', $%PluralFieldName% , old('%FieldName%'), ['class' => 'form-control']) }}\n"
                 form += "           @else\n"
                 form += "               {{ Form::select('%FieldName%', $%PluralFieldName% , $"+ nameTableSingular + "->%FieldName% , ['class' => 'form-control']) }}\n"
                 form += "           @endif\n"
+
+                form = form.replace(/%PluralFieldName%/g, pluralFieldName);       
             }else{
                 form += "           @if (null !== (old('%FieldName%')))\n"
                 form += '               <input id="%FieldName%" type="'+ inputType +'" class="form-control" name="%FieldName%" value="{{ old(\'%FieldName%\') }}">\n'                
@@ -314,7 +324,7 @@ function generateEdit(response, postData) {
             form += '      </div>\n'
             form += '</div>\n'
 
-            form = form.replace(/%FieldName%/g, fieldName);
+            form = form.replace(/%FieldName%/g, fieldName);                 
         }        
 
     });
