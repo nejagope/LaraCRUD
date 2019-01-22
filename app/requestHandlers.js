@@ -220,26 +220,121 @@ function generateCreate(response, postData) {
     });
     fs.createReadStream(filePath).pipe(response);
 }
-/*
-function index(response, postData) {	
-	console.log("Manipulador de petición 'iniciar' ha sido llamado.");
-	var contenido = '<html>'+
-    '<head>'+
-    '<meta charset=UTF-8" />'+
-    '</head>'+
-    '<body>'+
-    '<form action="/subir" method="post">'+
-    '<textarea id="areaTexto" name = "text" rows="20" cols="60"></textarea>'+
-    '<input type="submit" value="Enviar texto" />'+
-    '</form>'+
-    '</body>'+
-    '</html>';
 
-    response.writeHead(200, {"Content-Type": "text/html"});
-    response.write(contenido);
-    response.end();
+function generateEdit(response, postData) {    
+    let tableName = querystring.parse(postData)["tableName"];
+    let nameTableSingular = querystring.parse(postData)["tableSingularName"];
+    
+    //compilación del archivo fuente la migración    
+    let codigo = querystring.parse(postData)["txtCode0"];
+    let ast = compilador.compilar(codigo);
+
+    if (!tableName)
+        tableName = ast.up.table;
+
+    if (!nameTableSingular){
+        if (tableName.endsWith('ies'))
+            nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 3) + "y";
+        else
+            nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 1);
+    }
+
+
+    //generación de index.blade.php
+    let plantilla = fs.readFileSync('./laravel/views/edit.blade.php', 'utf8');    
+    
+    plantilla = plantilla.replace(/%Table%/g, tableName);    
+    plantilla = plantilla.replace(/%TableSingular%/g, nameTableSingular); 
+    plantilla = plantilla.replace(/%RoutePrefix%/g, 'sge'); 
+
+    //campos del formulario
+    let form = '';
+    ast.up.definitions.forEach(function(definition, i, arr){
+        let inputType = "text";
+        let isForeignKey = false;
+
+        if (definition.name && definition.coltype != "increments"){
+            let fieldName = definition.name;
+            
+            form += '<div class="form-group{{ $errors->has(\'%FieldName%\') ? \' has-error\' : \'\' }}">\n'                         
+            form += '       <label for="%FieldName%" class="col-md-4 control-label">%FieldName%</label>\n'
+            form += '       <div class="col-md-6">\n'
+
+            switch (definition.coltype){
+                case "integer":
+                    if (definition.name.endsWith('_id'))
+                        isForeignKey = true;
+                case "float":
+                case "decimal":
+                    inputType = "number";
+                    break;
+                case "string":
+                case "smallText":
+                case "mediumText":
+                    inputType = "text";
+                    break;
+                case "date":
+                    inputType = "date";
+                    break;
+                case "datetime":
+                case "timestamp":
+                    inputType = "datetime-local";
+                    break;
+                case "boolean":
+                    inputType = "checkbox";
+                    break;
+            }
+
+            if (isForeignKey){
+                let pluralFieldName = "";
+
+                if (definition.name.endsWith('y_id'))
+                    pluralFieldName = definition.name.substring(0, definition.name.length - 4) + 'ies';
+                else if (definition.name.endsWith('_id'))
+                    pluralFieldName = definition.name.substring(0, definition.name.length - 3) + 's';                
+
+                form += "           @if (null !== (old('%FieldName%')))\n"
+                form += "               {{ Form::select('%FieldName%', $%PluralFieldName% , old('%FieldName%'), ['class' => 'form-control']) }}\n"
+                form += "           @else\n"
+                form += "               {{ Form::select('%FieldName%', $%PluralFieldName% , $"+ nameTableSingular + "->%FieldName% , ['class' => 'form-control']) }}\n"
+                form += "           @endif\n"
+            }else{
+                form += "           @if (null !== (old('%FieldName%')))\n"
+                form += '               <input id="%FieldName%" type="'+ inputType +'" class="form-control" name="%FieldName%" value="{{ old(\'%FieldName%\') }}">\n'                
+                form += "           @else\n"
+                form += '               <input id="%FieldName%" type="'+ inputType +'" class="form-control" name="%FieldName%" value="{{ $' + nameTableSingular + '->%FieldName%) }}">\n'                
+                form += "           @endif\n"
+            }
+            
+            form += '           @if ($errors->has("%FieldName%"))\n'
+            form += '               <span class="help-block">\n'
+            form += '                   <strong>{{ $errors->first("%FieldName%") }}</strong>\n'
+            form += '                </span>\n'
+            form += '           @endif\n'
+            form += '      </div>\n'
+            form += '</div>\n'
+
+            form = form.replace(/%FieldName%/g, fieldName);
+        }        
+
+    });
+    plantilla = plantilla.replace(/%Inputs%/g, form);
+
+
+    //generación del archivo     
+    if (!fs.existsSync('./genfiles')){
+        fs.mkdirSync('./genfiles');
+    }
+    var filePath =  "./genfiles/edit.blade.php";
+    fs.writeFileSync(filePath, plantilla, 'utf8');    
+
+    //Envío del archivo al cliente
+    response.writeHead(200, {
+        "Content-Type": "application/octet-stream",
+        "Content-Disposition" : "attachment; filename=edit.blade.php"
+    });
+    fs.createReadStream(filePath).pipe(response);
 }
-*/
 
 function subir(response, postData) {
 	console.log("Manipulador de petición 'subir' fue llamado.");
@@ -253,3 +348,4 @@ exports.subir = subir;
 exports.compilar = compilar;
 exports.generateIndex = generateIndex;
 exports.generateCreate = generateCreate;
+exports.generateEdit = generateEdit;

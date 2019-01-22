@@ -9,5 +9,6 @@ handle["/subir"] = requestHandlers.subir;
 handle["/compilar"] = requestHandlers.compilar;
 handle["/generateIndex"] = requestHandlers.generateIndex;
 handle["/generateCreate"] = requestHandlers.generateCreate;
+handle["/generateEdit"] = requestHandlers.generateEdit;
 
 servidor.iniciar(router.route, handle);
