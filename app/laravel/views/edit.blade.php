@@ -14,7 +14,7 @@
                     <h4>Edit %TableSingular%</h4><hr>
                 </div>
                 <div class="panel-body">                   					
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('%RoutePrefix%_%Table%_udate', ['%TableSingular%' => $%TableSingular%]) }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ route('%RoutePrefix%_%Table%_update', ['%TableSingular%' => $%TableSingular%]) }}">
                         {{ csrf_field() }}
 						
                         %Inputs%
