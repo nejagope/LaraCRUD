@@ -53,14 +53,17 @@
 
     <form action="/compilar" method="post">
       <div class="row">
-          <div class="col-sm-3">
+          <div class="col-md-2">
               <input type="text" name="tableName" class="form-control" placeholder="Table name">
           </div>        
-          <div class="col-sm-3">
-              <input type="text" name="tableSingularName" class="form-control" placeholder="Table singular name">  
+          <div class="col-md-2">
+              <input type="text" name="tableSingularName" class="form-control" placeholder="Table singular name" width="100%">  
           </div>   
+          <div class="col-md-2">
+            <input type="text" name="routePrefix" class="form-control" placeholder="Route prefix">  
+        </div>   
 
-          <div class="col-sm-6">
+          <div class="col-md-6">
             <div class="text-right">        
                 <div>
                   <div class="btn-group">          			              

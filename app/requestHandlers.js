@@ -31,6 +31,10 @@ function compilar(response, postData) {
 function generateIndex(response, postData) {    
     let tableName = querystring.parse(postData)["tableName"];
     let nameTableSingular = querystring.parse(postData)["tableSingularName"];
+    let routePrefix = querystring.parse(postData)["routePrefix"];
+
+    if (!routePrefix)
+        routePrefix = "admin";
     
     //compilación del archivo fuente la migración    
     let codigo = querystring.parse(postData)["txtCode0"];
@@ -51,7 +55,7 @@ function generateIndex(response, postData) {
     
     plantilla = plantilla.replace(/%Table%/g, tableName);    
     plantilla = plantilla.replace(/%TableSingular%/g, nameTableSingular); 
-    plantilla = plantilla.replace(/%RoutePrefix%/g, 'sge'); 
+    plantilla = plantilla.replace(/%RoutePrefix%/g, routePrefix); 
 
     //encabezados de columna
     let filaHeaders = '';
@@ -124,7 +128,10 @@ function generateIndex(response, postData) {
 function generateCreate(response, postData) {    
     let tableName = querystring.parse(postData)["tableName"];
     let nameTableSingular = querystring.parse(postData)["tableSingularName"];
-    
+    let routePrefix = querystring.parse(postData)["routePrefix"];
+
+    if (!routePrefix)
+        routePrefix = "admin";
     //compilación del archivo fuente la migración    
     let codigo = querystring.parse(postData)["txtCode0"];
     let ast = compilador.compilar(codigo);
@@ -145,7 +152,7 @@ function generateCreate(response, postData) {
     
     plantilla = plantilla.replace(/%Table%/g, tableName);    
     plantilla = plantilla.replace(/%TableSingular%/g, nameTableSingular); 
-    plantilla = plantilla.replace(/%RoutePrefix%/g, 'sge'); 
+    plantilla = plantilla.replace(/%RoutePrefix%/g, routePrefix); 
 
     //campos del formulario
     let form = '';
@@ -232,6 +239,10 @@ function generateCreate(response, postData) {
 function generateEdit(response, postData) {    
     let tableName = querystring.parse(postData)["tableName"];
     let nameTableSingular = querystring.parse(postData)["tableSingularName"];
+    let routePrefix = querystring.parse(postData)["routePrefix"];
+
+    if (!routePrefix)
+        routePrefix = "admin";
     
     //compilación del archivo fuente la migración    
     let codigo = querystring.parse(postData)["txtCode0"];
@@ -253,7 +264,7 @@ function generateEdit(response, postData) {
     
     plantilla = plantilla.replace(/%Table%/g, tableName);    
     plantilla = plantilla.replace(/%TableSingular%/g, nameTableSingular); 
-    plantilla = plantilla.replace(/%RoutePrefix%/g, 'sge'); 
+    plantilla = plantilla.replace(/%RoutePrefix%/g, routePrefix); 
 
     //campos del formulario
     let form = '';
