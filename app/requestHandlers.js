@@ -20,7 +20,8 @@ function index(response, postData) {
     
 }
 
-function compilar(response, postData) {    
+function compilar(response, postData) { 
+    let codigo = querystring.parse(postData)["txtCode0"];   
     let ast = compilador.compilar(codigo); 
     response.writeHead(200, {"Content-Type": "application/json"});    
     response.write(JSON.stringify(ast));    
@@ -357,6 +358,81 @@ function generateEdit(response, postData) {
     fs.createReadStream(filePath).pipe(response);
 }
 
+function generateController(response, postData) {    
+    let tableName = querystring.parse(postData)["tableName"];
+    let nameTableSingular = querystring.parse(postData)["tableSingularName"];
+    let routePrefix = querystring.parse(postData)["routePrefix"];
+
+    if (!routePrefix)
+        routePrefix = "admin";
+    
+    //compilación del archivo fuente la migración    
+    let codigo = querystring.parse(postData)["txtCode0"];
+    let ast = compilador.compilar(codigo);
+
+    if (!tableName)
+        tableName = ast.up.table;
+
+    if (!nameTableSingular){
+        if (tableName.endsWith('ies'))
+            nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 3) + "y";
+        else
+            nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 1);
+    }
+
+    let modelName = nameTableSingular.charAt(0).toUpperCase() + nameTableSingular.slice(1);
+    let modelPluralName = tableName.charAt(0).toUpperCase() + tableName.slice(1);
+
+    //generación de Controller
+    let plantilla = fs.readFileSync('./laravel/controllers/CrudController.php', 'utf8');    
+    
+    //Validation Rules and field asignations
+    let rules = '';
+    let asig = '';
+
+    ast.up.definitions.forEach(function(definition, i, arr){
+        
+        if (definition.name && definition.coltype != "increments"){
+            let fieldName = definition.name;
+            asig += '$%TableSingularName%->' + fieldName + " = $request->input('" + fieldName + "');\n" 
+        }
+        /*
+        if (definition.name && definition.coltype != "increments"){
+            let fieldName = definition.name;
+            if (definition.details.length){
+                rules += fieldName + "=> '"
+                definition.details.forEach(function(detail){
+
+                });
+                rules += "',"
+            }     
+            */   
+
+    });
+    plantilla = plantilla.replace(/%FieldsAsignation%/g, asig);
+    plantilla = plantilla.replace(/%ValidationRules%/g, rules);
+    plantilla = plantilla.replace(/%Table%/g, tableName);    
+    plantilla = plantilla.replace(/%TableSingularName%/g, nameTableSingular);
+    plantilla = plantilla.replace(/%ModelName%/g, modelName);
+    plantilla = plantilla.replace(/%ModelPluralName%/g, modelPluralName); 
+    plantilla = plantilla.replace(/%RoutePrefix%/g, routePrefix); 
+    
+
+    //generación del archivo     
+    if (!fs.existsSync('./genfiles')){
+        fs.mkdirSync('./genfiles');
+    }
+    var filePath =  "./genfiles/" + modelPluralName + "Controller.php";
+    fs.writeFileSync(filePath, plantilla, 'utf8');    
+
+    //Envío del archivo al cliente
+    response.writeHead(200, {
+        "Content-Type": "application/octet-stream",
+        "Content-Disposition" : "attachment; filename=" + modelPluralName + "Controller.php"
+    });
+    fs.createReadStream(filePath).pipe(response);
+}
+
 function subir(response, postData) {
 	console.log("Manipulador de petición 'subir' fue llamado.");
 	response.writeHead(200, {"Content-Type": "text/html"});
@@ -370,3 +446,4 @@ exports.compilar = compilar;
 exports.generateIndex = generateIndex;
 exports.generateCreate = generateCreate;
 exports.generateEdit = generateEdit;
+exports.generateController = generateController;
