@@ -53,39 +53,52 @@
 
     <form action="/compilar" method="post">
       <div class="row">
-          <div class="col-md-2">
-              <input type="text" name="tableName" class="form-control" placeholder="Table name">
-          </div>        
-          <div class="col-md-2">
-              <input type="text" name="tableSingularName" class="form-control" placeholder="Table singular name" width="100%">  
-          </div>   
-          <div class="col-md-2">
-            <input type="text" name="routePrefix" class="form-control" placeholder="Route prefix">  
+          <div class="col-md-4">              
+              <input type="text" name="tableName" class="form-control" placeholder="Table name (optional)"> 
+          
+              <input type="text" name="tableSingularName" class="form-control" placeholder="Table singular name (optional)" width="100%"> 
+          
+            <input type="text" name="routePrefix" class="form-control" placeholder="Route prefix (optional)">  
         </div>   
 
-          <div class="col-md-6">
-            <div class="text-right">        
-                <div>
-                  <div class="btn-group">          			              
-                      <div class="text-right">
-                        <button type="submit" class="btn btn-primary">
-                          Compilar
-                        </button>
-        
-                        <input type="submit" formaction="/generateIndex" class="btn btn-primary" value="Generate Index">
-        
-                        <input type="submit" formaction="/generateCreate" class="btn btn-primary" value="Generate Create">                    
+          <div class="col-md-8">
+            <small>
 
-                        <input type="submit" formaction="/generateEdit" class="btn btn-primary" value="Generate Edit">                    
-
-                        <input type="submit" formaction="/generateController" class="btn btn-primary" value="Generate Controller">                    
-                      </div>              
-                    </div>
-                  </div>  	          
-              </div>
+                <p>Paste you migration code in the editor and then choose the option you prefer.</p>
+                <p>
+                  You can specify the table name and the table singular name used for the generated files.
+                  If not specified, the name of the table found in the migration definition will be used.
+                </p>
+                <p>You can specify the route prefix for the generated files (it will be used for naming the class generated and the controller name also). If not specified "Admin" will be used as prefix.</p>
+              </small>            
           </div>            
         </div>
+
+        <div class="row">
+          <div class="col-md-12">
+              <div>        
+                  <div class="text-left">                  
+                    <div class="btn-group">          			              
+                        <div>
+                          <button type="submit" class="btn btn-primary">
+                            Compile 
+                          </button>
+          
+                          <input type="submit" formaction="/generateIndex" class="btn btn-primary" value="Generate Index View">
+          
+                          <input type="submit" formaction="/generateCreate" class="btn btn-primary" value="Generate Create View">                    
+  
+                          <input type="submit" formaction="/generateEdit" class="btn btn-primary" value="Generate Edit View">                    
+  
+                          <input type="submit" formaction="/generateController" class="btn btn-primary" value="Generate Controller">                    
+                        </div>              
+                      </div>
+                    </div>  	          
+                </div>
+          </div>
+        </div>
       
+        <hr>
 			<!-- Nav tabs -->
 			<ul class="nav nav-tabs">
 			    <li class="nav-item">
