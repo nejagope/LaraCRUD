@@ -383,6 +383,8 @@ function generateController(response, postData) {
     let modelName = nameTableSingular.charAt(0).toUpperCase() + nameTableSingular.slice(1);
     let modelPluralName = tableName.charAt(0).toUpperCase() + tableName.slice(1);
 
+    let routePrefixCapitalized = routePrefix.charAt(0).toUpperCase() + routePrefix.slice(1);
+
     //generación de Controller
     let plantilla = fs.readFileSync('./laravel/controllers/CrudController.php', 'utf8');    
     
@@ -415,7 +417,8 @@ function generateController(response, postData) {
     plantilla = plantilla.replace(/%TableSingularName%/g, nameTableSingular);
     plantilla = plantilla.replace(/%ModelName%/g, modelName);
     plantilla = plantilla.replace(/%ModelPluralName%/g, modelPluralName); 
-    plantilla = plantilla.replace(/%RoutePrefix%/g, routePrefix); 
+    plantilla = plantilla.replace(/%RoutePrefix%/g, routePrefix);
+    plantilla = plantilla.replace(/%RoutePrefixCapitalized%/g, routePrefixCapitalized); 
     
 
     //generación del archivo     
@@ -428,7 +431,7 @@ function generateController(response, postData) {
     //Envío del archivo al cliente
     response.writeHead(200, {
         "Content-Type": "application/octet-stream",
-        "Content-Disposition" : "attachment; filename=" + modelPluralName + "Controller.php"
+        "Content-Disposition" : "attachment; filename=" + routePrefixCapitalized + modelPluralName + "Controller.php"
     });
     fs.createReadStream(filePath).pipe(response);
 }
