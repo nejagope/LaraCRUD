@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\%ModelName%;
 use Illuminate\Http\Request;
 
-class %ModelPluralName%Controller extends Controller
+class %RoutePrefixCapitalized%%ModelPluralName%Controller extends Controller
 {
     public function index(Request $request){
 		$%Table% = %ModelName%::withTrashed()->paginate(15);
