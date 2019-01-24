@@ -398,17 +398,24 @@ function generateController(response, postData) {
             let fieldName = definition.name;
             asig += '$%TableSingularName%->' + fieldName + " = $request->input('" + fieldName + "');\n" 
         }
-        /*
+        
         if (definition.name && definition.coltype != "increments"){
             let fieldName = definition.name;
-            if (definition.details.length){
-                rules += fieldName + "=> '"
-                definition.details.forEach(function(detail){
-
-                });
-                rules += "',"
+            rules += fieldName + "=> '" + definition.coltype;
+            if (definition.modifiers){
+                
+                definition.modifiers.forEach(function(modifier){
+                    if (modifier.type != "default")
+                        rules +=  "|" + modifier.type;
+                });                
             }     
-            */   
+
+            if (definition.details.length){
+                if (definition.coltype == "string")
+                        rules +=  "|max:" + definition.details[0];                
+            }     
+            rules += "',\n";
+        }   
 
     });
     plantilla = plantilla.replace(/%FieldsAsignation%/g, asig);
