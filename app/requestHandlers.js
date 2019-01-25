@@ -14,6 +14,7 @@ function index(response, postData) {
     }
     */
     let html = plantilla[0] + plantilla[1] + plantilla[2]; 
+    html = html.replace(/%ConsoleResults%/g, "");    
     response.writeHead(200, {"Content-Type": "text/html"});
     response.write(html);            
     response.end();
