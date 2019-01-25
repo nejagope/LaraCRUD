@@ -9,11 +9,11 @@ class %RoutePrefixCapitalized%%ModelPluralName%Controller extends Controller
 {
     public function index(Request $request){
 		$%Table% = %ModelName%::withTrashed()->paginate(15);
-		return view('%Table%.index', ['$%Table%' => $%Table%]);
+		return view('%RoutePrefix%.%Table%.index', ['$%Table%' => $%Table%]);
 	}
 	
 	public function create(Request $request){
-		return view('%Table%.create');
+		return view('%RoutePrefix%.%Table%.create');
 	}
 	
 	public function store(Request $request){
@@ -33,7 +33,7 @@ class %RoutePrefixCapitalized%%ModelPluralName%Controller extends Controller
 	}
 	
 	public function edit(%ModelName% $%TableSingularName%){		
-		return view('%Table%.edit', ['%TableSingularName%' => $%TableSingularName%]);
+		return view('%RoutePrefix%.%Table%.edit', ['%TableSingularName%' => $%TableSingularName%]);
 	}
 	
 	public function update(Request $request){
