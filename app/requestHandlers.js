@@ -5,20 +5,13 @@ var compilador = require("./analizador.js");
 function index(response, postData) {    
     let data = fs.readFileSync('./html/index.htm', 'utf8');
     let plantilla = data.split("{%}");
-    //console.log(plantilla.length);
-    //console.log(plantilla);
-    /*
-    for (var i = 0; i < 100; i++) {
-        plantilla[0] += '<tr><td width="25%">' + i + '</td><td><p class="lineaEditor"> Un texto de prueba</p></td>';
-        plantilla[1] += '<tr><td width="25%">' + i + '</td><td><p class="lineaEditor"> Un texto de C4D de prueba</p></td>';
-    }
-    */
+    
     let html = plantilla[0] + plantilla[1] + plantilla[2]; 
     html = html.replace(/%ConsoleResults%/g, "");    
+    html = html.replace(/%Code%/g, "");    
     response.writeHead(200, {"Content-Type": "text/html"});
     response.write(html);            
-    response.end();
-    
+    response.end();    
 }
 
 function compilar(response, postData) { 
@@ -29,6 +22,51 @@ function compilar(response, postData) {
     //response.write("Tu enviaste: " + querystring.parse(postData)["txtCode0"]);
     response.end(); 
 }
+
+function generateRoutes(response, postData) {   
+    let codigo = querystring.parse(postData)["txtCode0"]; 
+    let tableName = querystring.parse(postData)["tableName"];
+    let nameTableSingular = querystring.parse(postData)["tableSingularName"];
+    let routePrefix = querystring.parse(postData)["routePrefix"];
+    
+    let ast = compilador.compilar(codigo);
+    console.log(ast);
+    if (!routePrefix)
+        routePrefix = "admin";
+
+    if (!tableName)
+        tableName = ast.up.table;
+
+    if (!nameTableSingular){
+        if (tableName.endsWith('ies'))
+            nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 3) + "y";
+        else
+            nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 1);
+    }
+
+    let modelName = nameTableSingular.charAt(0).toUpperCase() + nameTableSingular.slice(1);
+    let modelPluralName = tableName.charAt(0).toUpperCase() + tableName.slice(1);
+        
+    let routes = "";
+    routes += "Route::post('" + routePrefix + "/" + tableName + "/create', '" + modelPluralName + "Controller@create')->name('" + routePrefix + "_" + tableName + "_create');\n";
+    routes += "Route::post('" + routePrefix + "/" + tableName + "/store', '" + modelPluralName + "Controller@store')->name('" + routePrefix + "_" + tableName + "_store');\n";
+    routes += "Route::post('" + routePrefix + "/" + tableName + "{" + nameTableSingular + "}/edit', '" + modelPluralName + "Controller@edit')->name('" + routePrefix + "_" + tableName + "_edit');\n";
+    routes += "Route::post('" + routePrefix + "/" + tableName + "{" + nameTableSingular + "}/update', '" + modelPluralName + "Controller@update')->name('" + routePrefix + "_" + tableName + "_update');\n";
+    routes += "Route::post('" + routePrefix + "/" + tableName + "{" + nameTableSingular + "}/delete', '" + modelPluralName + "Controller@delete')->name('" + routePrefix + "_" + tableName + "_delete');\n";
+    routes += "Route::post('" + routePrefix + "/" + tableName + "{" + nameTableSingular + "}/restore', '" + modelPluralName + "Controller@restore')->name('" + routePrefix + "_" + tableName + "_restore');\n";
+    routes += "Route::post('" + routePrefix + "/" + tableName + "', '" + modelPluralName + "Controller@index')->name('" + routePrefix + "_" + tableName + "_index');\n";
+
+    let data = fs.readFileSync('./html/index.htm', 'utf8');
+    let plantilla = data.split("{%}");
+    
+    let html = plantilla[0] + plantilla[1] + plantilla[2]; 
+    html = html.replace(/%ConsoleResults%/g, routes);    
+    html = html.replace(/%Code%/g, codigo);    
+    response.writeHead(200, {"Content-Type": "text/html"});
+    response.write(html);            
+    response.end();    
+}
+
 
 function generateIndex(response, postData) {    
     let tableName = querystring.parse(postData)["tableName"];
@@ -458,3 +496,4 @@ exports.generateIndex = generateIndex;
 exports.generateCreate = generateCreate;
 exports.generateEdit = generateEdit;
 exports.generateController = generateController;
+exports.generateRoutes = generateRoutes;

@@ -11,5 +11,6 @@ handle["/generateIndex"] = requestHandlers.generateIndex;
 handle["/generateCreate"] = requestHandlers.generateCreate;
 handle["/generateEdit"] = requestHandlers.generateEdit;
 handle["/generateController"] = requestHandlers.generateController;
+handle["/generateRoutes"] = requestHandlers.generateRoutes;
 
 servidor.iniciar(router.route, handle);
