@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\%RoutePrefixCapitalized%;
 
+use App\Http\Controllers\Controller;
 use App\%ModelName%;
 use Illuminate\Http\Request;
 
