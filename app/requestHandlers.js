@@ -48,13 +48,13 @@ function generateRoutes(response, postData) {
     let modelPluralName = tableName.charAt(0).toUpperCase() + tableName.slice(1);
         
     let routes = "";
-    routes += "Route::post('" + routePrefix + "/" + tableName + "/create', '" + modelPluralName + "Controller@create')->name('" + routePrefix + "_" + tableName + "_create');\n";
+    routes += "Route::get('" + routePrefix + "/" + tableName + "/create', '" + modelPluralName + "Controller@create')->name('" + routePrefix + "_" + tableName + "_create');\n";
     routes += "Route::post('" + routePrefix + "/" + tableName + "/store', '" + modelPluralName + "Controller@store')->name('" + routePrefix + "_" + tableName + "_store');\n";
-    routes += "Route::post('" + routePrefix + "/" + tableName + "{" + nameTableSingular + "}/edit', '" + modelPluralName + "Controller@edit')->name('" + routePrefix + "_" + tableName + "_edit');\n";
-    routes += "Route::post('" + routePrefix + "/" + tableName + "{" + nameTableSingular + "}/update', '" + modelPluralName + "Controller@update')->name('" + routePrefix + "_" + tableName + "_update');\n";
-    routes += "Route::post('" + routePrefix + "/" + tableName + "{" + nameTableSingular + "}/delete', '" + modelPluralName + "Controller@delete')->name('" + routePrefix + "_" + tableName + "_delete');\n";
-    routes += "Route::post('" + routePrefix + "/" + tableName + "{" + nameTableSingular + "}/restore', '" + modelPluralName + "Controller@restore')->name('" + routePrefix + "_" + tableName + "_restore');\n";
-    routes += "Route::post('" + routePrefix + "/" + tableName + "', '" + modelPluralName + "Controller@index')->name('" + routePrefix + "_" + tableName + "_index');\n";
+    routes += "Route::get('" + routePrefix + "/" + tableName + "/{" + nameTableSingular + "}/edit', '" + modelPluralName + "Controller@edit')->name('" + routePrefix + "_" + tableName + "_edit');\n";
+    routes += "Route::post('" + routePrefix + "/" + tableName + "/{" + nameTableSingular + "}/update', '" + modelPluralName + "Controller@update')->name('" + routePrefix + "_" + tableName + "_update');\n";
+    routes += "Route::post('" + routePrefix + "/" + tableName + "/{" + nameTableSingular + "}/delete', '" + modelPluralName + "Controller@delete')->name('" + routePrefix + "_" + tableName + "_delete');\n";
+    routes += "Route::post('" + routePrefix + "/" + tableName + "/{" + nameTableSingular + "}/restore', '" + modelPluralName + "Controller@restore')->name('" + routePrefix + "_" + tableName + "_restore');\n";
+    routes += "Route::get('" + routePrefix + "/" + tableName + "', '" + modelPluralName + "Controller@index')->name('" + routePrefix + "_" + tableName + "_index');\n";
 
     let data = fs.readFileSync('./html/index.htm', 'utf8');
     let plantilla = data.split("{%}");
