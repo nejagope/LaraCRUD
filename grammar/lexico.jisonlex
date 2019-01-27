@@ -64,7 +64,9 @@
 "float"					        return 'float'
 "string"					      return 'cadena'
 "datetime"					        return 'datetime'
+"date"					        return 'date'
 "decimal"					        return 'decimal'
+"mediumText"			return 'mediumText'
 
 "<?php"						          return 'php'
 "use"			return 'use'

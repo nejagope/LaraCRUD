@@ -51,10 +51,14 @@ COLTYPE : increments
             {{$$ = {type: 'coltype', val: 'increments' } }}
         | cadena
             {{$$ = {type: 'coltype', val: 'string' } }}
+        | mediumText
+            {{$$ = {type: 'coltype', val: 'mediumText' } }}
         | entero
             {{$$ = {type: 'coltype', val: 'integer' } }}
         | booleano
             {{$$ = {type: 'coltype', val: 'boolean' } }}
+        | date
+            {{$$ = {type: 'coltype', val: 'date' } }}
         | datetime
             {{$$ = {type: 'coltype', val: 'datetime' } }}
         | timestamp
@@ -68,7 +72,7 @@ COLTYPE : increments
         | remembertoken
             {{$$ = {type: 'coltype', val: 'remembertoken' } }}
         | softdeletes
-            {{$$ = {type: 'coltype', val: 'softdeletes' } }}
+            {{$$ = {type: 'coltype', val: 'softdeletes' } }}        
         ;
 
 MODIFIERS : MODIFIERS MODIFIER

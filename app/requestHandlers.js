@@ -215,14 +215,13 @@ function generateCreate(response, postData) {
                 case "decimal":
                     inputType = "number";
                     break;
-                case "string":
-                case "smallText":
+                case "string":                
                 case "mediumText":
                     inputType = "text";
                     break;
                 case "date":
                     inputType = "date";
-                    break;
+                    break;                
                 case "datetime":
                 case "timestamp":
                     inputType = "datetime-local";
@@ -327,12 +326,11 @@ function generateEdit(response, postData) {
                 case "decimal":
                     inputType = "number";
                     break;
-                case "string":
-                case "smallText":
+                case "string":                
                 case "mediumText":
                     inputType = "text";
                     break;
-                case "date":
+                case "date":                
                     inputType = "date";
                     break;
                 case "datetime":
@@ -440,7 +438,13 @@ function generateController(response, postData) {
         
         if (definition.name && definition.coltype != "increments"){
             let fieldName = definition.name;
-            rules += fieldName + "=> '" + definition.coltype;
+            let validationType = definition.coltype;
+            if (validationType == "timestamp")
+                validationType = "datetime";
+            else if (validationType == "mediumText")
+                validationType = "string";
+                
+            rules += fieldName + "=> '" + validationType;
             if (definition.modifiers){
                 
                 definition.modifiers.forEach(function(modifier){
