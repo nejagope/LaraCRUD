@@ -122,17 +122,17 @@ function generateIndex(response, postData) {
         
         if (definition.name && definition.name.endsWith('_id')){
             //llaves foráneas
-            fila += "{{ Form::select('" + definition.name + "', $" + definition.name.substring(0, definition.name.length - 3) + "s , $" + definition.name + ", ['class' => 'form-control']) }}\n"
+            fila += "<td>{{ Form::select('" + definition.name + "', $" + definition.name.substring(0, definition.name.length - 3) + "s , $" + definition.name + ", ['class' => 'form-control']) }}</td>\n"
         }else{
             switch(definition.coltype) {            
                 case "remembertoken":
-                    fila += '<td>not_recovered<td>\n';              
+                    fila += '<td>not_recovered</td>\n';              
                   break;
                 case "timestamps":
-                    fila += '<td>$' + nameTableSingular + '->created_at <td>\n' + '<td>$' + nameTableSingular + '->updated_at <td>\n';           
+                    fila += '<td>{{$' + nameTableSingular + '->created_at }}</td>\n' + '<td>{{$' + nameTableSingular + '->updated_at }}</td>\n';           
                   break;
                 case "softdeletes":
-                    fila += '<td>$' + nameTableSingular + '->deleted_at <td>\n';              
+                    fila += '<td>{{$' + nameTableSingular + '->deleted_at }}</td>\n';              
                   break;
                 case "boolean":
                     fila += "@if ($" + nameTableSingular + '->' + definition.name + ")\n"
@@ -143,7 +143,7 @@ function generateIndex(response, postData) {
                     fila = fila.replace(/%FieldName%/g, definition.name);
                     break;
                 default:
-                    fila += '<td>$'+ nameTableSingular + '->' + definition.name + '<td>\n';              
+                    fila += '<td>{{$'+ nameTableSingular + '->' + definition.name + '}} </td>\n';              
               }
         }        
     });
