@@ -442,17 +442,19 @@ function generateController(response, postData) {
         if (definition.name && definition.coltype != "increments"){
             let fieldName = definition.name;
             let validationType = definition.coltype;
-            if (validationType == "timestamp")
-                validationType = "datetime";
+            if (validationType == "timestamp" || validationType == "datetime")
+                validationType = "date";
             else if (validationType == "mediumText")
                 validationType = "string";
                 
-            rules += fieldName + "=> '" + validationType;
+            rules += "'" + fieldName + "' => '" + validationType;
             if (definition.modifiers){
                 
                 definition.modifiers.forEach(function(modifier){
-                    if (modifier.type != "default")
-                        rules +=  "|" + modifier.type;
+                    if (modifier.type == "unique")
+                        rules += "|unique:" + tableName;
+                    else if (modifier.type != "default")
+                        rules +=  "|" + modifier.type;                    
                 });                
             }     
 
