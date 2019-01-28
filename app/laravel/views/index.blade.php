@@ -59,7 +59,8 @@
 						</td>
 					</tr>                                    
 				@endforeach                            
-			</table>                                                 					                
+			</table>  
+			<?php echo %Table%->render(); ?>                                               					                
         </div>
     </div>
 
