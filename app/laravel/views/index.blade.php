@@ -1,5 +1,9 @@
 @extends('layouts.main')
 
+@section('title')
+ - %RoutePrefix% %Table%
+@endsection('title')
+
 @section('head')
 <script>
 	function confirmation(msj){

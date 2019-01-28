@@ -1,5 +1,9 @@
 @extends('layouts.main')
 
+@section('title')
+ - %RoutePrefix% edit %Table%
+@endsection('title')
+
 @section('head')
 @stop
 
