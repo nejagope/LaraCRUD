@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.%RoutePrefix%.main')
 
 @section('title')
  - %RoutePrefix% %Table%
