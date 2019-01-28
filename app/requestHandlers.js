@@ -29,10 +29,13 @@ function generateRoutes(response, postData) {
     let nameTableSingular = querystring.parse(postData)["tableSingularName"];
     let routePrefix = querystring.parse(postData)["routePrefix"];
     
+    
     let ast = compilador.compilar(codigo);
-    console.log(ast);
+    
     if (!routePrefix)
         routePrefix = "admin";
+    
+    let routePrefixCapitalized = routePrefix.charAt(0).toUpperCase() + routePrefix.slice(1);
 
     if (!tableName)
         tableName = ast.up.table;
@@ -45,16 +48,16 @@ function generateRoutes(response, postData) {
     }
 
     let modelName = nameTableSingular.charAt(0).toUpperCase() + nameTableSingular.slice(1);
-    let modelPluralName = tableName.charAt(0).toUpperCase() + tableName.slice(1);
+    let modelPluralName = tableName.charAt(0).toUpperCase() + tableName.slice(1);    
         
     let routes = "";
-    routes += "Route::get('" + routePrefix + "/" + tableName + "/create', '" + modelPluralName + "Controller@create')->name('" + routePrefix + "_" + tableName + "_create');\n";
-    routes += "Route::post('" + routePrefix + "/" + tableName + "/store', '" + modelPluralName + "Controller@store')->name('" + routePrefix + "_" + tableName + "_store');\n";
-    routes += "Route::get('" + routePrefix + "/" + tableName + "/{" + nameTableSingular + "}/edit', '" + modelPluralName + "Controller@edit')->name('" + routePrefix + "_" + tableName + "_edit');\n";
-    routes += "Route::post('" + routePrefix + "/" + tableName + "/{" + nameTableSingular + "}/update', '" + modelPluralName + "Controller@update')->name('" + routePrefix + "_" + tableName + "_update');\n";
-    routes += "Route::post('" + routePrefix + "/" + tableName + "/{" + nameTableSingular + "}/delete', '" + modelPluralName + "Controller@delete')->name('" + routePrefix + "_" + tableName + "_delete');\n";
-    routes += "Route::post('" + routePrefix + "/" + tableName + "/{" + nameTableSingular + "}/restore', '" + modelPluralName + "Controller@restore')->name('" + routePrefix + "_" + tableName + "_restore');\n";
-    routes += "Route::get('" + routePrefix + "/" + tableName + "', '" + modelPluralName + "Controller@index')->name('" + routePrefix + "_" + tableName + "_index');\n";
+    routes += "Route::get('" + routePrefix + "/" + tableName + "/create', '" + routePrefix + "\\" + routePrefixCapitalized + modelPluralName + "Controller@create')->name('" + routePrefix + "_" + tableName + "_create');\n";
+    routes += "Route::post('" + routePrefix + "/" + tableName + "/store', '" + routePrefix + "\\" + routePrefixCapitalized + modelPluralName + "Controller@store')->name('" + routePrefix + "_" + tableName + "_store');\n";
+    routes += "Route::get('" + routePrefix + "/" + tableName + "/{" + nameTableSingular + "}/edit', '" + routePrefix + "\\" + routePrefixCapitalized + modelPluralName + "Controller@edit')->name('" + routePrefix + "_" + tableName + "_edit');\n";
+    routes += "Route::post('" + routePrefix + "/" + tableName + "/{" + nameTableSingular + "}/update', '" + routePrefix + "\\" + routePrefixCapitalized + modelPluralName + "Controller@update')->name('" + routePrefix + "_" + tableName + "_update');\n";
+    routes += "Route::post('" + routePrefix + "/" + tableName + "/{" + nameTableSingular + "}/delete', '" + routePrefix + "\\" + routePrefixCapitalized + modelPluralName + "Controller@delete')->name('" + routePrefix + "_" + tableName + "_delete');\n";
+    routes += "Route::post('" + routePrefix + "/" + tableName + "/{" + nameTableSingular + "}/restore', '" + routePrefix + "\\" + routePrefixCapitalized + modelPluralName + "Controller@restore')->name('" + routePrefix + "_" + tableName + "_restore');\n";
+    routes += "Route::get('" + routePrefix + "/" + tableName + "', '" + routePrefix + "\\" + routePrefixCapitalized + modelPluralName + "Controller@index')->name('" + routePrefix + "_" + tableName + "_index');\n";
 
     let data = fs.readFileSync('./html/index.htm', 'utf8');
     let plantilla = data.split("{%}");
