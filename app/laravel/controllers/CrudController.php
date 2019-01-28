@@ -10,7 +10,7 @@ class %RoutePrefixCapitalized%%ModelPluralName%Controller extends Controller
 {
     public function index(Request $request){
 		$%Table% = %ModelName%::withTrashed()->paginate(15);
-		return view('%RoutePrefix%.%Table%.index', ['$%Table%' => $%Table%]);
+		return view('%RoutePrefix%.%Table%.index', ['%Table%' => $%Table%]);
 	}
 	
 	public function create(Request $request){
