@@ -353,7 +353,7 @@ function generateEdit(response, postData) {
                 else if (definition.name.endsWith('_id'))
                     pluralFieldName = fieldName.substring(0, fieldName.length - 3) + 's';                
 
-                form += "           @if (null !== (old('%FieldName%')))\n"
+                form += "           @if (null !== old('%FieldName%'))\n"
                 form += "               {{ Form::select('%FieldName%', $%PluralFieldName% , old('%FieldName%'), ['class' => 'form-control']) }}\n"
                 form += "           @else\n"
                 form += "               {{ Form::select('%FieldName%', $%PluralFieldName% , $"+ nameTableSingular + "->%FieldName% , ['class' => 'form-control']) }}\n"
@@ -361,10 +361,10 @@ function generateEdit(response, postData) {
 
                 form = form.replace(/%PluralFieldName%/g, pluralFieldName);       
             }else{
-                form += "           @if (null !== (old('%FieldName%')))\n"
+                form += "           @if (null !== old('%FieldName%'))\n"
                 form += '               <input id="%FieldName%" type="'+ inputType +'" class="form-control" name="%FieldName%" value="{{ old(\'%FieldName%\') }}">\n'                
                 form += "           @else\n"
-                form += '               <input id="%FieldName%" type="'+ inputType +'" class="form-control" name="%FieldName%" value="{{ $' + nameTableSingular + '->%FieldName%) }}">\n'                
+                form += '               <input id="%FieldName%" type="'+ inputType +'" class="form-control" name="%FieldName%" value="{{ $' + nameTableSingular + '->%FieldName% }}">\n'                
                 form += "           @endif\n"
             }
             
