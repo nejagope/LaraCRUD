@@ -23,6 +23,16 @@ function compilar(response, postData) {
     response.end(); 
 }
 
+function generateLayout(response, postData) {       
+    var filePath =  "./laravel/views/layouts/admin/main.blade.php";
+    //envío al cliente
+    response.writeHead(200, {
+        "Content-Type": "application/octet-stream",
+        "Content-Disposition" : "attachment; filename=main.blade.php"
+    });
+    fs.createReadStream(filePath).pipe(response);
+}
+
 function generateRoutes(response, postData) {   
     let codigo = querystring.parse(postData)["txtCode0"]; 
     let tableName = querystring.parse(postData)["tableName"];
@@ -528,3 +538,4 @@ exports.generateCreate = generateCreate;
 exports.generateEdit = generateEdit;
 exports.generateController = generateController;
 exports.generateRoutes = generateRoutes;
+exports.generateLayout = generateLayout;

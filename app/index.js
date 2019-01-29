@@ -12,5 +12,6 @@ handle["/generateCreate"] = requestHandlers.generateCreate;
 handle["/generateEdit"] = requestHandlers.generateEdit;
 handle["/generateController"] = requestHandlers.generateController;
 handle["/generateRoutes"] = requestHandlers.generateRoutes;
+handle["/generateLayout"] = requestHandlers.generateLayout;
 
 servidor.iniciar(router.route, handle);
