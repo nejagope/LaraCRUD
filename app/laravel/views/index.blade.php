@@ -25,7 +25,7 @@
 					%ColumnHeaders%
 					<th> 
 						<a href="{{ route('%RoutePrefix%_%Table%_create') }}"> 
-							<span class="fa fa-plus-circle"></span> Agregar
+							Add
 						</a>
 					</th>
 				</tr>
@@ -36,23 +36,26 @@
 							<table>
 								<tr>
 									<td>
-										<a class="btn btn-warning btn-sm" href="{{ route('%RoutePrefix%_%Table%_edit', ['%TableSingular%' => $%TableSingular%]) }}"> 
-											Edit
-										</a>
-									</td>
+										<div class="btn-group">
+											<a class="btn btn-primary btn-sm" href="{{ route('%RoutePrefix%_%Table%_edit', ['%TableSingular%' => $%TableSingular%]) }}"> 
+												Edit
+											</a>
+										
+											<form class="form form-inline" method="post" action="{{ route('%RoutePrefix%_%Table%_restore', ['%TableSingular%' => $%TableSingular%]) }}" onsubmit="return confirmation('Confirm restauration: ' + {{$%TableSingular%->id}});">								
+												{{ csrf_field() }}										
+												<input type="submit" class="btn btn-success btn-sm"  value="Restore">																				
+											</form>  
+										
+											<form class="form form-inline" method="post" action="{{ route('%RoutePrefix%_%Table%_delete', ['%TableSingular%' => $%TableSingular%]) }}" onsubmit="return confirmation('Confirm deletion: ' + {{$%TableSingular%->id}});">								
+												{{ csrf_field() }}										
+												<input type="submit" class="btn btn-warning btn-sm"  value="Delete">																				
+											</form>
 
-									<td>
-										<form class="form form-inline" method="post" action="{{ route('%RoutePrefix%_%Table%_restore', ['%TableSingular%' => $%TableSingular%]) }}" onsubmit="return confirmation('Confirm restauration: ' + {{$%TableSingular%->id}});">								
-											{{ csrf_field() }}										
-											<input type="submit" class="btn btn-success btn-sm"  value="Restore">																				
-										</form>  
-									</td>
-
-									<td>
-										<form class="form form-inline" method="post" action="{{ route('%RoutePrefix%_%Table%_delete', ['%TableSingular%' => $%TableSingular%]) }}" onsubmit="return confirmation('Confirm deletion: ' + {{$%TableSingular%->id}});">								
-											{{ csrf_field() }}										
-											<input type="submit" class="btn btn-danger btn-sm"  value="Delete">																				
-										</form>   
+											<form class="form form-inline" method="post" action="{{ route('%RoutePrefix%_%Table%_remove', ['%TableSingular%' => $%TableSingular%]) }}" onsubmit="return confirmation('Confirm permanent deletion: ' + {{$%TableSingular%->id}});">								
+												{{ csrf_field() }}										
+												<input type="submit" class="btn btn-danger btn-sm"  value="Remove">																				
+											</form>
+										</div>   
 									</td>  
 								</tr>
 							</table>
