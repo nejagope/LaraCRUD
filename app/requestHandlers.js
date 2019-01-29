@@ -242,7 +242,8 @@ function generateCreate(response, postData) {
                 else if (definition.name.endsWith('_id'))
                     pluralFieldName = fieldName.substring(0, fieldName.length - 3) + 's';                
 
-                form += "           {{ Form::select('%FieldName%', $%PluralFieldName% , $%FieldName%, ['class' => 'form-control']) }}\n"
+                //form += "           {{ Form::select('%FieldName%', $%PluralFieldName% , $%FieldName%, ['class' => 'form-control']) }}\n"
+                form += '           <input id="%FieldName%" type="number" class="form-control" name="%FieldName%" value="{{ old(\'%FieldName%\') }}">\n'                
                 form = form.replace(/%PluralFieldName%/g, pluralFieldName);       
             }else{
                 form += '           <input id="%FieldName%" type="'+ inputType +'" class="form-control" name="%FieldName%" value="{{ old(\'%FieldName%\') }}">\n'                
@@ -352,14 +353,22 @@ function generateEdit(response, postData) {
                     pluralFieldName = fieldName.substring(0, fieldName.length - 4) + 'ies';
                 else if (definition.name.endsWith('_id'))
                     pluralFieldName = fieldName.substring(0, fieldName.length - 3) + 's';                
-
+                    
+                /*
                 form += "           @if (null !== old('%FieldName%'))\n"
                 form += "               {{ Form::select('%FieldName%', $%PluralFieldName% , old('%FieldName%'), ['class' => 'form-control']) }}\n"
                 form += "           @else\n"
                 form += "               {{ Form::select('%FieldName%', $%PluralFieldName% , $"+ nameTableSingular + "->%FieldName% , ['class' => 'form-control']) }}\n"
                 form += "           @endif\n"
 
+
                 form = form.replace(/%PluralFieldName%/g, pluralFieldName);       
+                */
+                form += "           @if (null !== old('%FieldName%'))\n"
+                form += '               <input id="%FieldName%" type="number" class="form-control" name="%FieldName%" value="{{ old(\'%FieldName%\') }}">\n'                
+                form += "           @else\n"
+                form += '               <input id="%FieldName%" type="number" class="form-control" name="%FieldName%" value="{{ $' + nameTableSingular + '->%FieldName% }}">\n'                
+                form += "           @endif\n"
             }else{
                 form += "           @if (null !== old('%FieldName%'))\n"
                 form += '               <input id="%FieldName%" type="'+ inputType +'" class="form-control" name="%FieldName%" value="{{ old(\'%FieldName%\') }}">\n'                
