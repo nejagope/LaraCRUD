@@ -448,6 +448,17 @@ function generateController(response, postData) {
                 validationType = "string";
                 
             rules += "'" + fieldName + "' => '" + validationType;
+
+            if (fieldName.endsWith("_id")){
+                //llave foránea
+                let referencedTable = fieldName.substring(0, fieldName.length - 3);
+                if (referencedTable.endsWith("y")){
+                    referencedTable = referencedTable.substring(0, referencedTable.length - 1) + "ies";
+                }else{
+                    referencedTable += "s";
+                }
+                rules += "|exists:" + referencedTable + ",id";
+            }
             if (definition.modifiers){
                 
                 definition.modifiers.forEach(function(modifier){
