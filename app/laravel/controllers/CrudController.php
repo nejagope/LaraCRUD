@@ -33,11 +33,12 @@ class %RoutePrefixCapitalized%%ModelPluralName%Controller extends Controller
 		return redirect()->route('%RoutePrefix%_%Table%_index');
 	}
 	
-	public function edit(%ModelName% $%TableSingularName%){		
+	public function edit(Request $request){
+		$%TableSingularName% = %ModelName%::findOrFail($request->%TableSingularName%);
 		return view('%RoutePrefix%.%Table%.edit', ['%TableSingularName%' => $%TableSingularName%]);
 	}
 	
-	public function update(Request $request){
+	public function update(Request $request){		
 		$this->validate(
 			$request, 
 			[
@@ -53,12 +54,14 @@ class %RoutePrefixCapitalized%%ModelPluralName%Controller extends Controller
 		return redirect()->route('%RoutePrefix%_%Table%_index');
 	}
 	
-	public function delete(%ModelName% $%TableSingularName%){		
+	public function delete(Request $request){		
+		$%TableSingularName% = %ModelName%::findOrFail($request->%TableSingularName%);	
 		$%TableSingularName%->delete();
 		return redirect()->route('%RoutePrefix%_%Table%_index');
 	}
 
-	public function restore(%ModelName% $%TableSingularName%){		
+	public function restore(Request $request){	
+		$%TableSingularName% = %ModelName%::withTrashed()->findOrFail($request->%TableSingularName%);		
 		$%TableSingularName%->restore();
 		return redirect()->route('%RoutePrefix%_%Table%_index');
 	}
