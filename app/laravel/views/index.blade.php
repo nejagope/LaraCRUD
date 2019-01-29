@@ -5,11 +5,6 @@
 @endsection('title')
 
 @section('head')
-<script>
-	function confirmation(msj){
-		return confirm(msj);
-	}
-</script>
 @endsection
 
 @section('content')
