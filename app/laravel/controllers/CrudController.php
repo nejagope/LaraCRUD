@@ -60,6 +60,12 @@ class %RoutePrefixCapitalized%%ModelPluralName%Controller extends Controller
 		return redirect()->route('%RoutePrefix%_%Table%_index');
 	}
 
+	public function remove(Request $request){		
+		$%TableSingularName% = %ModelName%::withTrashed()->findOrFail($request->%TableSingularName%);	
+		$%TableSingularName%->forceDelete();
+		return redirect()->route('%RoutePrefix%_%Table%_index');
+	}
+
 	public function restore(Request $request){	
 		$%TableSingularName% = %ModelName%::withTrashed()->findOrFail($request->%TableSingularName%);		
 		$%TableSingularName%->restore();
