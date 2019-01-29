@@ -453,8 +453,10 @@ function generateController(response, postData) {
                 definition.modifiers.forEach(function(modifier){
                     if (modifier.type == "unique")
                         rules += "|unique:" + tableName;
+                    else if (modifier.type == "unsigned")
+                        rules += "|min:0";
                     else if (modifier.type != "default")
-                        rules +=  "|" + modifier.type;                    
+                        rules +=  "|" + modifier.type;                                        
                 });                
             }     
 
