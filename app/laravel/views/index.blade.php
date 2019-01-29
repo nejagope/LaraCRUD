@@ -58,7 +58,7 @@
 					</tr>                                    
 				@endforeach                            
 			</table>  
-			<?php echo %Table%->render(); ?>                                               					                
+			<?php echo $%Table%->render(); ?>                                               					                
         </div>
     </div>
 
