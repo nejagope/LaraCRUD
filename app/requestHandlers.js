@@ -56,9 +56,18 @@ function generateRoutes(response, postData) {
         else
             nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 1);
     }
-
-    let modelName = nameTableSingular.charAt(0).toUpperCase() + nameTableSingular.slice(1);
-    let modelPluralName = tableName.charAt(0).toUpperCase() + tableName.slice(1);    
+    
+    let modelName = "";
+    let modelNameArray = nameTableSingular.split("_");
+    modelNameArray.forEach(function(namePart){
+        modelName += namePart.charAt(0).toUpperCase() + namePart.slice(1);
+    });
+    
+    let modelPluralName = "";
+    if (tableName.endsWith('ies'))
+        modelPluralName = modelName.substring(0, modelName.length - 1) + "ies";
+    else
+        modelPluralName = modelName + "s";
         
     let routes = "Route::group(['prefix' => '"+ routePrefix +"'], function(){\n";
     routes += "  Route::group(['prefix' => '"+ tableName +"'], function(){\n";
@@ -443,8 +452,17 @@ function generateController(response, postData) {
             nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 1);
     }
 
-    let modelName = nameTableSingular.charAt(0).toUpperCase() + nameTableSingular.slice(1);
-    let modelPluralName = tableName.charAt(0).toUpperCase() + tableName.slice(1);
+    let modelName = "";
+    let modelNameArray = nameTableSingular.split("_");
+    modelNameArray.forEach(function(namePart){
+        modelName += namePart.charAt(0).toUpperCase() + namePart.slice(1);
+    });
+    
+    let modelPluralName = "";
+    if (tableName.endsWith('ies'))
+        modelPluralName = modelName.substring(0, modelName.length - 1) + "ies";
+    else
+        modelPluralName = modelName + "s";
 
     let routePrefixCapitalized = routePrefix.charAt(0).toUpperCase() + routePrefix.slice(1);
 
