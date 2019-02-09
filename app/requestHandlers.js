@@ -148,7 +148,11 @@ function generateIndex(response, postData) {
         if (definition.name && definition.name.endsWith('_id')){
             //llaves foráneas
             //fila += "<td>{{ Form::select('" + definition.name + "', $" + definition.name.substring(0, definition.name.length - 3) + "s , $" + definition.name + ", ['class' => 'form-control']) }}</td>\n"
-            fila += '<td>{{$'+ nameTableSingular + '->' + definition.name + '}} </td>\n';              
+            fila += '<td>{{$'+ nameTableSingular + '->' + definition.name + '}}\n';              
+            fila += "   @if ($" + nameTableSingular + '->' + definition.name + ")\n"
+            fila += "       ; {{$" + nameTableSingular + '->' + definition.name.substring(0, definition.name.length - 3) + "->name}}\n";
+            fila += '   @endif\n';
+            fila += ' </td>\n';
         }else{
             switch(definition.coltype) {            
                 case "remembertoken":
