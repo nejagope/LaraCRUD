@@ -41,7 +41,7 @@
 														{{ csrf_field() }}										
 														<input type="submit" class="btn btn-success btn-sm"  value="Restore">																				
 													</form>  	
-												@else
+												@elseif (%UseSoftDeletes%)
 													<form class="form form-inline" method="post" action="{{ route('%RoutePrefix%_%Table%_delete', ['%TableSingular%' => $%TableSingular%]) }}" onsubmit="return confirmation('Confirm deletion: ' + {{$%TableSingular%->id}});">								
 														{{ csrf_field() }}										
 														<input type="submit" class="btn btn-warning btn-sm"  value="Delete">																				
