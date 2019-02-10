@@ -143,6 +143,7 @@ function generateIndex(response, postData) {
     
     // datos
     let fila = '';
+    let useSoftDeletes = "false";
     ast.up.definitions.forEach(function(definition, i, arr){
         
         if (definition.name && definition.name.endsWith('_id')){
@@ -162,7 +163,8 @@ function generateIndex(response, postData) {
                     fila += '<td>{{$' + nameTableSingular + '->created_at }}</td>\n' + '<td>{{$' + nameTableSingular + '->updated_at }}</td>\n';           
                   break;
                 case "softdeletes":
-                    fila += '<td>{{$' + nameTableSingular + '->deleted_at }}</td>\n';              
+                    fila += '<td>{{$' + nameTableSingular + '->deleted_at }}</td>\n';  
+                    useSoftDeletes = "true";            
                   break;
                 case "boolean":
                     fila += "@if ($" + nameTableSingular + '->' + definition.name + ")\n"
@@ -177,7 +179,8 @@ function generateIndex(response, postData) {
               }
         }        
     });
-    plantilla = plantilla.replace(/%Fields%/g, fila);   
+    plantilla = plantilla.replace(/%Fields%/g, fila);
+    plantilla = plantilla.replace(/%UseSoftDeletes%/g, useSoftDeletes);   
 
     //Creación del archivo
     if (!fs.existsSync('./genfiles')){
