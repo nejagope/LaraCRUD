@@ -36,15 +36,19 @@
 												Edit
 											</a>
 										
-											<form class="form form-inline" method="post" action="{{ route('%RoutePrefix%_%Table%_restore', ['%TableSingular%' => $%TableSingular%]) }}" onsubmit="return confirmation('Confirm restauration: ' + {{$%TableSingular%->id}});">								
-												{{ csrf_field() }}										
-												<input type="submit" class="btn btn-success btn-sm"  value="Restore">																				
-											</form>  
-										
-											<form class="form form-inline" method="post" action="{{ route('%RoutePrefix%_%Table%_delete', ['%TableSingular%' => $%TableSingular%]) }}" onsubmit="return confirmation('Confirm deletion: ' + {{$%TableSingular%->id}});">								
-												{{ csrf_field() }}										
-												<input type="submit" class="btn btn-warning btn-sm"  value="Delete">																				
-											</form>
+											@if (property_exists($%TableSingular%, 'deleted_at')) 
+												@if (isset($%TableSingular%->deleted_at))																									
+													<form class="form form-inline" method="post" action="{{ route('%RoutePrefix%_%Table%_restore', ['%TableSingular%' => $%TableSingular%]) }}" onsubmit="return confirmation('Confirm restauration: ' + {{$%TableSingular%->id}});">								
+														{{ csrf_field() }}										
+														<input type="submit" class="btn btn-success btn-sm"  value="Restore">																				
+													</form>  	
+												@else
+													<form class="form form-inline" method="post" action="{{ route('%RoutePrefix%_%Table%_delete', ['%TableSingular%' => $%TableSingular%]) }}" onsubmit="return confirmation('Confirm deletion: ' + {{$%TableSingular%->id}});">								
+														{{ csrf_field() }}										
+														<input type="submit" class="btn btn-warning btn-sm"  value="Delete">																				
+													</form>
+												@endif																				
+											@endif
 
 											<form class="form form-inline" method="post" action="{{ route('%RoutePrefix%_%Table%_remove', ['%TableSingular%' => $%TableSingular%]) }}" onsubmit="return confirmation('Confirm permanent deletion: ' + {{$%TableSingular%->id}});">								
 												{{ csrf_field() }}										
