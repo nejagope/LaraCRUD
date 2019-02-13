@@ -7,6 +7,10 @@
 @section('head')
 @stop
 
+@section('links')
+| <a href="{{ route('admin_%Table%_index')}}">&lt;&lt; Back to %Table% </a>
+@stop
+
 @section('content')
 
 <div class="container">

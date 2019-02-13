@@ -25,6 +25,12 @@
         @yield('head')
     </head>
     <body>
+        <div class="container">
+            <hr>            
+                <a href="{{ route('admin_index') }}">&lt;&lt; Back to admin panel</a>
+                @yield('links')
+            <hr>
+        </div>
         @yield('content')
     </body>
 </html>
