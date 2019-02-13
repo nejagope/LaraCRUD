@@ -13,5 +13,6 @@ handle["/generateEdit"] = requestHandlers.generateEdit;
 handle["/generateController"] = requestHandlers.generateController;
 handle["/generateRoutes"] = requestHandlers.generateRoutes;
 handle["/generateLayout"] = requestHandlers.generateLayout;
+handle["/generateAdminIndex"] = requestHandlers.generateAdminIndex;
 
 servidor.iniciar(router.route, handle);

@@ -33,6 +33,16 @@ function generateLayout(response, postData) {
     fs.createReadStream(filePath).pipe(response);
 }
 
+function generateAdminIndex(response, postData) {       
+    var filePath =  "./laravel/views/admin_index.blade.php";
+    //envío al cliente
+    response.writeHead(200, {
+        "Content-Type": "application/octet-stream",
+        "Content-Disposition" : "attachment; filename=admin_index.blade.php"
+    });
+    fs.createReadStream(filePath).pipe(response);
+}
+
 function generateRoutes(response, postData) {   
     let codigo = querystring.parse(postData)["txtCode0"]; 
     let tableName = querystring.parse(postData)["tableName"];
@@ -568,3 +578,4 @@ exports.generateEdit = generateEdit;
 exports.generateController = generateController;
 exports.generateRoutes = generateRoutes;
 exports.generateLayout = generateLayout;
+exports.generateAdminIndex = generateAdminIndex;
