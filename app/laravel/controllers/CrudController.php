@@ -71,4 +71,24 @@ class %RoutePrefixCapitalized%%ModelPluralName%Controller extends Controller
 		$%TableSingularName%->restore();
 		return redirect()->route('%RoutePrefix%_%Table%_index');
 	}
+
+	public function attach(Request $request){		
+		$%TableSingularName% = %ModelName%::withTrashed()->findOrFail($request->%TableSingularName%);		
+		/*
+		if ($request->associatedSingularTableName){
+			$%TableSingularName%->associatedTableName()->attach($request->associatedSingularTableName);
+		}
+		*/
+		return redirect()->route('%RoutePrefix%_%Table%_view', ['%TableSingularName%' => $%TableSingularName%]);
+	}
+
+	public function detach(Request $request){		
+		$%TableSingularName% = %ModelName%::withTrashed()->findOrFail($request->%TableSingularName%);		
+		/*
+		if ($request->associatedSingularTableName){
+			$%TableSingularName%->associatedTableName()->detach($request->associatedSingularTableName);
+		}
+		*/
+		return redirect()->route('%RoutePrefix%_%Table%_view', ['%TableSingularName%' => $%TableSingularName%]);
+	}
 }

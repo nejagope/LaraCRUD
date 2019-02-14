@@ -10,6 +10,7 @@ handle["/compilar"] = requestHandlers.compilar;
 handle["/generateIndex"] = requestHandlers.generateIndex;
 handle["/generateCreate"] = requestHandlers.generateCreate;
 handle["/generateEdit"] = requestHandlers.generateEdit;
+handle["/generateView"] = requestHandlers.generateView;
 handle["/generateController"] = requestHandlers.generateController;
 handle["/generateRoutes"] = requestHandlers.generateRoutes;
 handle["/generateLayout"] = requestHandlers.generateLayout;

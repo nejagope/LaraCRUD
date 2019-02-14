@@ -32,6 +32,10 @@
 								<tr>
 									<td>
 										<div class="btn-group">
+											<a class="btn btn-primary btn-sm" href="{{ route('%RoutePrefix%_%Table%_view', ['%TableSingular%' => $%TableSingular%]) }}"> 
+												View
+											</a>
+
 											<a class="btn btn-primary btn-sm" href="{{ route('%RoutePrefix%_%Table%_edit', ['%TableSingular%' => $%TableSingular%]) }}"> 
 												Edit
 											</a>

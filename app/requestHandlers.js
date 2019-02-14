@@ -88,6 +88,9 @@ function generateRoutes(response, postData) {
     routes += "         Route::post('/delete', '" + routePrefix + "\\" + routePrefixCapitalized + modelPluralName + "Controller@delete')->name('" + routePrefix + "_" + tableName + "_delete');\n";
     routes += "         Route::post('/remove', '" + routePrefix + "\\" + routePrefixCapitalized + modelPluralName + "Controller@remove')->name('" + routePrefix + "_" + tableName + "_remove');\n";
     routes += "         Route::post('/restore', '" + routePrefix + "\\" + routePrefixCapitalized + modelPluralName + "Controller@restore')->name('" + routePrefix + "_" + tableName + "_restore');\n";
+    routes += "         Route::get('/view', '" + routePrefix + "\\" + routePrefixCapitalized + modelPluralName + "Controller@view')->name('" + routePrefix + "_" + tableName + "_view');\n";
+    routes += "         Route::post('/attach', '" + routePrefix + "\\" + routePrefixCapitalized + modelPluralName + "Controller@attach')->name('" + routePrefix + "_" + tableName + "_attach');\n";
+    routes += "         Route::post('/detach', '" + routePrefix + "\\" + routePrefixCapitalized + modelPluralName + "Controller@detach')->name('" + routePrefix + "_" + tableName + "_detach');\n";
     routes += "         Route::get('/', '" + routePrefix + "\\" + routePrefixCapitalized + modelPluralName + "Controller@index')->name('" + routePrefix + "_" + tableName + "_index');\n";
     routes += "     });\n";
     routes += "});";
@@ -206,6 +209,103 @@ function generateIndex(response, postData) {
         "Content-Disposition" : "attachment; filename=index.blade.php"
     });
     fs.createReadStream(filePath).pipe(response);
+}
+
+function generateView(response, postData) {    
+    let tableName = querystring.parse(postData)["tableName"];
+    let nameTableSingular = querystring.parse(postData)["tableSingularName"];
+    let routePrefix = querystring.parse(postData)["routePrefix"];
+
+    if (!routePrefix)
+        routePrefix = "admin";
+    
+    //compilación del archivo fuente la migración    
+    let codigo = querystring.parse(postData)["txtCode0"];
+    let ast = compilador.compilar(codigo);
+
+    if (!tableName)
+        tableName = ast.up.table;
+
+    if (!nameTableSingular){
+        if (tableName.endsWith('ies'))
+            nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 3) + "y";
+        else
+            nameTableSingular = ast.up.table.substring(0, ast.up.table.length - 1);
+    }
+
+    //generación de view.blade.php
+    let plantilla = fs.readFileSync('./laravel/views/view.blade.php', 'utf8');    
+    //let plantillaAsoc = fs.readFileSync('./laravel/views/components/association.blade.php', 'utf8');    
+   
+    // datos
+    let filas = '', panelesAsociacion = '';
+    let useSoftDeletes = "false";
+    ast.up.definitions.forEach(function(definition, i, arr){
+        let fila = '';
+        //let panelAsoc = plantillaAsoc;
+
+        if (definition.name && definition.name.endsWith('_id')){ 
+            fila += '<tr>\n'           
+            fila += '   <td>' + definition.name + '</td>\n';
+            fila += '   <td>{{$'+ nameTableSingular + '->' + definition.name + '}}\n';              
+            fila += "       @if ($" + nameTableSingular + '->' + definition.name + ")\n"
+            fila += "           ; {{$" + nameTableSingular + '->' + definition.name.substring(0, definition.name.length - 3) + "->name}}\n";
+            fila += '       @endif\n';
+            fila += '   </td>\n';
+            fila += '</tr>\n';
+
+        }else{
+            
+            fila += '<tr>\n'   
+            switch(definition.coltype) {                            
+                case "remembertoken":
+                    fila += '   <td>remember_token</td><td>not_recovered</td>\n';              
+                  break;
+                case "timestamps":
+                    fila += '   <td>created_at</td>\n<td>{{$' + nameTableSingular + '->created_at }}</td></tr>\n' + '    <tr><td>updated_at</td>\n<td>{{$' + nameTableSingular + '->updated_at }}</td>';           
+                  break;
+                case "softdeletes":
+                    fila += '   <td>deleted_at</td><td>{{$' + nameTableSingular + '->deleted_at }}</td>\n';  
+                    useSoftDeletes = "true";            
+                  break;
+                case "boolean":
+                    fila += '   <td>' + definition.name + '</td>\n';
+                    fila += "@if ($" + nameTableSingular + '->' + definition.name + ")\n"
+                    fila += "   <td>" + '<input id="%FieldName%" type="checkbox" class="form-control" name="%FieldName%" value="{{ old(\'%FieldName%\') }}">\n'  +"</td>\n"
+                    fila += "@else\n"
+                    fila += "   <td>" + '<input id="%FieldName%" type="checkbox" checked class="form-control" name="%FieldName%" value="{{ old(\'%FieldName%\') }}">\n'  +"</td>\n"
+                    fila += "@endif\n"
+                    fila = fila.replace(/%FieldName%/g, definition.name);
+                    break;
+                default:
+                    fila += '   <td>' + definition.name + '</td>\n';
+                    fila += '<td>{{$'+ nameTableSingular + '->' + definition.name + '}} </td>\n';              
+              }
+              fila += '</tr>\n'  
+        }  
+        filas += fila;      
+    });
+     
+    plantilla = plantilla.replace(/%TableName%/g, tableName);    
+    plantilla = plantilla.replace(/%TableSingularName%/g, nameTableSingular); 
+    plantilla = plantilla.replace(/%RoutePrefix%/g, routePrefix);    
+    plantilla = plantilla.replace(/%Fields%/g, filas);
+    plantilla = plantilla.replace(/%UseSoftDeletes%/g, useSoftDeletes);   
+    
+    //Creación del archivo
+    if (!fs.existsSync('./genfiles')){
+        fs.mkdirSync('./genfiles');
+    }
+    var filePath =  "./genfiles/view.blade.php";
+
+    fs.writeFileSync(filePath, plantilla, 'utf8');    
+
+    //envío al cliente
+    response.writeHead(200, {
+        "Content-Type": "application/octet-stream",
+        "Content-Disposition" : "attachment; filename=view.blade.php"
+    });
+    fs.createReadStream(filePath).pipe(response);    
 }
 
 function generateCreate(response, postData) {    
@@ -575,6 +675,7 @@ exports.compilar = compilar;
 exports.generateIndex = generateIndex;
 exports.generateCreate = generateCreate;
 exports.generateEdit = generateEdit;
+exports.generateView = generateView;
 exports.generateController = generateController;
 exports.generateRoutes = generateRoutes;
 exports.generateLayout = generateLayout;
