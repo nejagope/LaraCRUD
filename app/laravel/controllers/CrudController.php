@@ -72,6 +72,11 @@ class %RoutePrefixCapitalized%%ModelPluralName%Controller extends Controller
 		return redirect()->route('%RoutePrefix%_%Table%_index');
 	}
 
+	public function view(Request $request){		
+		$%TableSingularName% = %ModelName%::withTrashed()->findOrFail($request->%TableSingularName%);
+		return view('%RoutePrefix%.%Table%.view', ['%TableSingularName%' => $%TableSingularName%]);		
+	}
+
 	public function attach(Request $request){		
 		$%TableSingularName% = %ModelName%::withTrashed()->findOrFail($request->%TableSingularName%);		
 		/*
