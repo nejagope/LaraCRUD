@@ -80,6 +80,13 @@ class %RoutePrefixCapitalized%%ModelPluralName%Controller extends Controller
 	public function attach(Request $request){		
 		$%TableSingularName% = %ModelName%::withTrashed()->findOrFail($request->%TableSingularName%);		
 		/*
+		$this->validate(
+			$request, 
+			[
+				'associatedSingularTableName' => 'integer|exists:associatedTableName,id'								
+			]
+		);
+
 		if ($request->associatedSingularTableName){
 			$%TableSingularName%->associatedTableName()->attach($request->associatedSingularTableName);
 		}
