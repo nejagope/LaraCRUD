@@ -97,6 +97,13 @@ class %RoutePrefixCapitalized%%ModelPluralName%Controller extends Controller
 	public function detach(Request $request){		
 		$%TableSingularName% = %ModelName%::withTrashed()->findOrFail($request->%TableSingularName%);		
 		/*
+		$this->validate(
+			$request, 
+			[
+				'associatedSingularTableName' => 'integer|exists:associatedTableName,id'								
+			]
+		);
+		
 		if ($request->associatedSingularTableName){
 			$%TableSingularName%->associatedTableName()->detach($request->associatedSingularTableName);
 		}
