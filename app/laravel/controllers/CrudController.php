@@ -79,15 +79,14 @@ class %RoutePrefixCapitalized%%ModelPluralName%Controller extends Controller
 
 	public function attach(Request $request){		
 		$%TableSingularName% = %ModelName%::withTrashed()->findOrFail($request->%TableSingularName%);		
-		/*
-		$this->validate(
-			$request, 
-			[
-				'associatedSingularTableName' => 'integer|exists:associatedTableName,id'								
-			]
-		);
-
+		/*		
 		if ($request->associatedSingularTableName){
+			$this->validate(
+				$request, 
+				[
+					'associatedSingularTableName' => 'integer|exists:associatedTableName,id'								
+				]
+			);
 			$%TableSingularName%->associatedTableName()->attach($request->associatedSingularTableName);
 		}
 		*/
@@ -96,15 +95,15 @@ class %RoutePrefixCapitalized%%ModelPluralName%Controller extends Controller
 
 	public function detach(Request $request){		
 		$%TableSingularName% = %ModelName%::withTrashed()->findOrFail($request->%TableSingularName%);		
-		/*
-		$this->validate(
-			$request, 
-			[
-				'associatedSingularTableName' => 'integer|exists:associatedTableName,id'								
-			]
-		);
-		
+		/*		
 		if ($request->associatedSingularTableName){
+			$this->validate(
+				$request, 
+				[
+					'associatedSingularTableName' => 'integer|exists:associatedTableName,id'								
+				]
+			);
+			
 			$%TableSingularName%->associatedTableName()->detach($request->associatedSingularTableName);
 		}
 		*/
