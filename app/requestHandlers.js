@@ -246,7 +246,7 @@ function generateView(response, postData) {
 
         if (definition.name && definition.name.endsWith('_id')){ 
             fila += '<tr>\n'           
-            fila += '   <td>' + definition.name + '</td>\n';
+            fila += '   <td><strong>' + definition.name + '</strong></td>\n';
             fila += '   <td>{{$'+ nameTableSingular + '->' + definition.name + '}}\n';              
             fila += "       @if ($" + nameTableSingular + '->' + definition.name + ")\n"
             fila += "           ; {{$" + nameTableSingular + '->' + definition.name.substring(0, definition.name.length - 3) + "->name}}\n";
@@ -259,17 +259,17 @@ function generateView(response, postData) {
             fila += '<tr>\n'   
             switch(definition.coltype) {                            
                 case "remembertoken":
-                    fila += '   <td>remember_token</td><td>not_recovered</td>\n';              
+                    fila += '   <td><strong>remember_token</strong></td><td>not_recovered</td>\n';              
                   break;
                 case "timestamps":
-                    fila += '   <td>created_at</td>\n<td>{{$' + nameTableSingular + '->created_at }}</td></tr>\n' + '    <tr><td>updated_at</td>\n<td>{{$' + nameTableSingular + '->updated_at }}</td>';           
+                    fila += '   <td><strong>created_at</strong></td>\n<td>{{$' + nameTableSingular + '->created_at }}</td></tr>\n' + '    <tr><td><strong>updated_at</strong></td>\n<td>{{$' + nameTableSingular + '->updated_at }}</td>';           
                   break;
                 case "softdeletes":
-                    fila += '   <td>deleted_at</td><td>{{$' + nameTableSingular + '->deleted_at }}</td>\n';  
+                    fila += '   <td><strong>deleted_at</strong></td><td>{{$' + nameTableSingular + '->deleted_at }}</td>\n';  
                     useSoftDeletes = "true";            
                   break;
                 case "boolean":
-                    fila += '   <td>' + definition.name + '</td>\n';
+                    fila += '   <td><strong>' + definition.name + '</strong></td>\n';
                     fila += "@if ($" + nameTableSingular + '->' + definition.name + ")\n"
                     fila += "   <td>" + '<input id="%FieldName%" type="checkbox" class="form-control" name="%FieldName%" value="{{ old(\'%FieldName%\') }}">\n'  +"</td>\n"
                     fila += "@else\n"
@@ -278,7 +278,7 @@ function generateView(response, postData) {
                     fila = fila.replace(/%FieldName%/g, definition.name);
                     break;
                 default:
-                    fila += '   <td>' + definition.name + '</td>\n';
+                    fila += '   <td><strong>' + definition.name + '</strong></td>\n';
                     fila += '<td>{{$'+ nameTableSingular + '->' + definition.name + '}} </td>\n';              
               }
               fila += '</tr>\n'  
