@@ -181,9 +181,9 @@ function generateIndex(response, postData) {
                   break;
                 case "boolean":
                     fila += "@if ($" + nameTableSingular + '->' + definition.name + ")\n"
-                    fila += "   <td>" + '<input id="%FieldName%" type="checkbox" class="form-control" name="%FieldName%" value="{{ old(\'%FieldName%\') }}">\n'  +"</td>\n"
+                    fila += "   <td>" + '<input id="%FieldName%" type="checkbox" class="form-control" name="%FieldName%" checked>\n'  +"</td>\n"
                     fila += "@else\n"
-                    fila += "   <td>" + '<input id="%FieldName%" type="checkbox" checked class="form-control" name="%FieldName%" value="{{ old(\'%FieldName%\') }}">\n'  +"</td>\n"
+                    fila += "   <td>" + '<input id="%FieldName%" type="checkbox" class="form-control" name="%FieldName%"> }}">\n'  +"</td>\n"
                     fila += "@endif\n"
                     fila = fila.replace(/%FieldName%/g, definition.name);
                     break;
@@ -271,9 +271,9 @@ function generateView(response, postData) {
                 case "boolean":
                     fila += '   <td><strong>' + definition.name + '</strong></td>\n';
                     fila += "@if ($" + nameTableSingular + '->' + definition.name + ")\n"
-                    fila += "   <td>" + '<input id="%FieldName%" type="checkbox" class="form-control" name="%FieldName%" value="{{ old(\'%FieldName%\') }}">\n'  +"</td>\n"
+                    fila += "   <td>" + '<input id="%FieldName%" type="checkbox" class="form-control" name="%FieldName%" checked readonly>\n'  +"</td>\n"
                     fila += "@else\n"
-                    fila += "   <td>" + '<input id="%FieldName%" type="checkbox" checked class="form-control" name="%FieldName%" value="{{ old(\'%FieldName%\') }}">\n'  +"</td>\n"
+                    fila += "   <td>" + '<input id="%FieldName%" type="checkbox" class="form-control" name="%FieldName%" readonly>\n'  +"</td>\n"
                     fila += "@endif\n"
                     fila = fila.replace(/%FieldName%/g, definition.name);
                     break;
