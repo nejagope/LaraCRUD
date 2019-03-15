@@ -604,6 +604,8 @@ function generateController(response, postData) {
                 validationType = "date";
             else if (validationType == "mediumText")
                 validationType = "string";
+            else if (validationType == "decimal")
+                validationType = "numeric";
                 
             rules += "'" + fieldName + "' => '" + validationType;
 
